@@ -8,9 +8,9 @@ class NitroCog(commands.Cog):
     @commands.command()
     async def nitro(self, ctx, *, arg=""):
         if arg == "nerd":
-            await ctx.send("https://discord.gift/abc123") # Replace with actual Nitro link
+            await ctx.send("https://discord.gift/abc123") 
         else:
-            await ctx.send("https://discord.gift/xyz456") # Replace with actual Nitro link
+            await ctx.send("https://discord.gift/xyz456") 
 
 def setup(bot):
     bot.add_cog(NitroCog(bot))
