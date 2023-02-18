@@ -3,7 +3,6 @@ from typing import List
 import discord
 from random import shuffle
 
-
 class Tournament(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
