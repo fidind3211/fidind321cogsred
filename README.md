@@ -2,11 +2,11 @@ Nitro cog
 This cog provides commands to send Discord Nitro links and manage the available links.
 
 Commands
-!nitro: Sends a Discord Nitro link in the channel. You can specify the link by providing a name for it after the command, for example: !nitro nerd.
+[p]nitro: Sends a Discord Nitro link in the channel. You can specify the link by providing a name for it after the command, for example: !nitro nerd.
 
-!addnitro: Adds a new Nitro link to the list of available links. This command is only available to the bot owner.
+[p]addnitro: Adds a new Nitro link to the list of available links. This command is only available to the bot owner.
 
-!listnitro: Lists all the available Nitro links and their names.
+[p]listnitro: Lists all the available Nitro links and their names.
 
 
 Installation
