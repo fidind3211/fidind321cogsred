@@ -66,18 +66,3 @@ class NitroCog(commands.Cog):
                         counts[word] += 1
             count_list = "\n".join([f"{name}: {count}" for name, count in counts.items()])
             await ctx.send(f"Usage counts:\n{count_list}")
-            
-    @commands.command()
-    async def nitrocount(self, ctx):
-        nitro_links = await self.config.nitro_links()
-        if not nitro_links:
-            await ctx.send("There are no Nitro links configured.")
-        else:
-            counts = {name: 0 for name in nitro_links.keys()}
-            for guild in self.bot.guilds:
-                for channel in guild.text_channels:
-                    try:
-                        messages = await channel.history(limit=1000).flatten()
-                        for message in messages:
-                            for word in message.content.split():
-                                if word in nitro_links
