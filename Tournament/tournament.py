@@ -1,75 +1,55 @@
+from typing import List
+import discord
 from discord.ext import commands
-import random
+from random import shuffle
+
 
 class Tournament(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.active_brackets = {}
+        self.participants = []
 
     @commands.command()
-    async def starttorny(self, ctx, *players):
-        num_players = len(players)
-        if num_players < 2:
-            await ctx.send('You need at least 2 players to start a tournament.')
+    async def starttorny(self, ctx, num_participants: int, *participants: str):
+        if num_participants != len(participants):
+            await ctx.send("Number of participants and number of names provided do not match.")
             return
-        elif num_players > 32:
-            await ctx.send('The maximum number of players is 32.')
+        if len(participants) < 2:
+            await ctx.send("A tournament needs at least 2 participants.")
             return
-
-        # Shuffle the players to create a randomized bracket
-        random.shuffle(players)
-
-        # Create the bracket and send it to the channel
-        bracket = []
-        while len(players) > 1:
-            bracket.append((players.pop(0), players.pop(0)))
-        if players:
-            bracket.append((players[0], 'BYE'))
-        message = 'Tournament bracket created!\n' + self.print_bracket(bracket)
-        await ctx.send(message)
-
-        # Store the active bracket in a dictionary with the channel ID as the key
-        self.active_brackets[ctx.channel.id] = bracket
-
-        # Start the first round of the tournament
-        await ctx.send('First match: {} VS {}'.format(bracket[0][0], bracket[0][1]))
+        shuffle(participants)
+        self.participants = participants
+        await ctx.send("Tournament bracket has been generated and randomized!")
+        for i in range(0, len(self.participants), 2):
+            player1 = self.participants[i]
+            player2 = self.participants[i + 1]
+            match = f"{player1} VS {player2}"
+            await ctx.send(f"**Match {i//2 + 1}**: {match}")
 
     @commands.command()
-    @commands.has_permissions(administrator=True)
+    @commands.has_role("Tournament Admin")
     async def win(self, ctx):
-        bracket = self.active_brackets.get(ctx.channel.id)
-        if not bracket:
-            await ctx.send('No active tournament found.')
+        if len(self.participants) == 0:
+            await ctx.send("No tournament bracket is currently active.")
             return
-        winner = bracket.pop(0)[0]
-        if bracket:
-            message = 'Next match: {} VS {}'.format(bracket[0][0], bracket[0][1])
-        else:
-            message = 'Tournament complete! {} is the winner.'.format(winner)
-        await ctx.send(message)
+        winner = self.participants.pop(0)
+        await ctx.send(f"{winner} has won the match!")
+        if len(self.participants) == 1:
+            await ctx.send(f"The winner of the tournament is: {self.participants[0]}")
+            self.participants = []
 
     @commands.command()
-    @commands.has_permissions(administrator=True)
+    @commands.has_role("Tournament Admin")
     async def lose(self, ctx):
-        bracket = self.active_brackets.get(ctx.channel.id)
-        if not bracket:
-            await ctx.send('No active tournament found.')
+        if len(self.participants) == 0:
+            await ctx.send("No tournament bracket is currently active.")
             return
-        winner = bracket.pop(0)[1]
-        if bracket:
-            message = 'Next match: {} VS {}'.format(bracket[0][0], bracket[0][1])
-        else:
-            message = 'Tournament complete! {} is the winner.'.format(winner)
-        await ctx.send(message)
+        self.participants.pop(0)
+        await ctx.send("Match has been forfeited.")
+        if len(self.participants) == 1:
+            await ctx.send(f"The winner of the tournament is: {self.participants[0]}")
+            self.participants = []
 
-    def print_bracket(self, bracket):
-        max_len = max(len(p1) + len(p2) + 3 for p1, p2 in bracket)
-        border = '+' + '-' * (max_len + 2) + '+'
-        lines = []
-        for p1, p2 in bracket:
-            line = '| ' + p1.ljust(max_len - len(p2)) + ' VS ' + p2 + ' |'
-            lines.append(line)
-        return '```' + border + '\n' + '\n'.join(lines) + '\n' + border + '```'
 
 def setup(bot):
     bot.add_cog(Tournament(bot))
