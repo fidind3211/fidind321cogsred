@@ -23,3 +23,7 @@ This cog does not require any configuration.
 
 Support
 If you encounter any issues with this cog, please contact the bot owner or developer for assistance.
+
+Fidind321sGenZ Cog
+
+General features bassicaly im hoping that uhh u can figure it out ur self bla, bla, bla, that's absurd!
