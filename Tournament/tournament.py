@@ -1,13 +1,12 @@
 from redbot.core import commands
 from typing import List
 import discord
-from discord.ext import commands
 from random import shuffle
-
 
 class Tournament(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.participants = []
 
     @commands.command()
     async def starttorny(self, ctx, num_participants: int, *participants: str):
@@ -49,7 +48,6 @@ class Tournament(commands.Cog):
         if len(self.participants) == 1:
             await ctx.send(f"The winner of the tournament is: {self.participants[0]}")
             self.participants = []
-
 
 def setup(bot):
     bot.add_cog(Tournament(bot))
