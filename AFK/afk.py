@@ -21,6 +21,13 @@ class AFKCog(commands.Cog):
             await message.channel.send(f'{message.author.mention} is no longer AFK.')
 
     @commands.command()
+    async def AFK(self, ctx):
+        # Update user's nickname with [AFK] prefix
+        await ctx.author.edit(nick='[AFK] ' + ctx.author.display_name)
+        self.afk_users.add(ctx.author.id)
+        await ctx.send(f'{ctx.author.mention} is now AFK.')
+
+    @commands.command()
     async def AFKS(self, ctx):
         # List all users with [AFK] prefix in their nickname
         afk_users = [member for member in ctx.guild.members if member.nick and member.nick.startswith('[AFK]')]
