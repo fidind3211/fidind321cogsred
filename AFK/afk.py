@@ -12,7 +12,6 @@ class AFKCog(commands.Cog):
             # Update user's nickname with [AFK] prefix
             await message.author.edit(nick='[AFK] ' + message.author.display_name)
             self.afk_users.add(message.author.id)
-            await message.channel.send(f'{message.author.mention} is now AFK.')
 
         elif message.author.id in self.afk_users:
             # Remove [AFK] prefix from user's nickname
