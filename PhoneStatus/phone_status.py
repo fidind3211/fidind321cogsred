@@ -1,3 +1,4 @@
+bot.load_extension("PhoneStatus.phone_status")
 import discord
 from discord.ext import commands
 
