@@ -31,3 +31,5 @@ If you encounter any issues with this cog, please contact the bot owner or devel
 ░░░██║░░░██╔══██║██╔══██║██║╚████║██╔═██╗░░╚═══██╗╚═╝
 ░░░██║░░░██║░░██║██║░░██║██║░╚███║██║░╚██╗██████╔╝██╗
 ░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝╚═════╝░╚═╝
+
+Thanks to BenCos18 for motivation!!!!!!!
