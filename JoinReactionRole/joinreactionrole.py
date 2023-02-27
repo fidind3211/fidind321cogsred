@@ -2,6 +2,7 @@ import discord
 from discord.utils import get
 from redbot.core import commands, checks, Config
 
+
 class JoinReactionRole(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -1,4 +1,4 @@
-from .join_reaction_role import JoinReactionRoleCog
+from .joinreactionrole import JoinReactionRole
 
 def setup(bot):
-    bot.add_cog(JoinReactionRoleCog(bot))
+    bot.add_cog(JoinReactionRole(bot))
