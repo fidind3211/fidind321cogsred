@@ -24,6 +24,16 @@ This cog does not require any configuration.
 Support
 If you encounter any issues with this cog, please contact the bot owner or developer for assistance.
 
+JoinReactionRole cog
+
+!set_join_role <role_mention>: Sets the join role for the server. Only users with the "Manage Roles" permission can use this command.
+
+!set_reaction_role <role_mention>: Sets the reaction role for the server. Only users with the "Manage Roles" permission can use this command.
+
+!set_message <message_link>: Sets the message to monitor for reactions. Only users with the "Manage Roles" permission can use this command.
+
+To use these commands, you need to replace ! with the prefix you have set for your Red Discord Bot instance. For example, if your bot prefix is ?, then you would use ?set_join_role <role_mention>.
+
 
 ████████╗██╗░░██╗░█████╗░███╗░░██╗██╗░░██╗░██████╗██╗
 ╚══██╔══╝██║░░██║██╔══██╗████╗░██║██║░██╔╝██╔════╝██║
