@@ -67,9 +67,16 @@ class JoinReactionRole(commands.Cog):
     async def set_message(self, ctx, message: discord.Message):
         try:
             await self.config.guild(ctx.guild).message_id.set(message.id)
-            await ctx.send(f"Message set to {message.jump_url}.")
+            await message.add_reaction('👍')
+            await ctx.send(f"Message set to {message.jump_url} and a reaction has been added.")
         except Exception as e:
             print(f"Error setting message ID: {e}.")
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        message_id = await self.config.guild(self.bot.guilds[0]).message_id()
+        message = await self.bot.get_channel(CHANNEL_ID).fetch_message(message_id)
+        await message.add_reaction('👍')
 
 def setup(bot):
     bot.add_cog(JoinReactionRole(bot))
