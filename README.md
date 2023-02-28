@@ -23,7 +23,7 @@ Configuration
 This cog does not require any configuration.
 
 Support
-If you encounter any issues with this cog, please contact the bot owner or developer for assistance.
+If you encounter any issues with this cog, please contact the bot owner or developer for assistance. (Sparkow#4718, BenCos18#8565)
 
 
 
