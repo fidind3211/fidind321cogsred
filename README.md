@@ -4,7 +4,7 @@ This cog provides commands to send Discord Nitro links and manage the available 
 Commands
 [p]nitro: Sends a Discord Nitro link in the channel. You can specify the link by providing a name for it after the command, for example: !nitro nerd.
 
-[p]addnitro: Adds a new Nitro link to the list of available links. This command is only available to the bot owner.
+[p]addnitro: Adds a new Nitro link to the list of available links. This command is only available to the bot owner. (adding for requests)
 
 [p]listnitro: Lists all the available Nitro links and their names.
 
@@ -12,6 +12,7 @@ Commands
 Installation
 To install this cog, run the following command in Discord:
 
+DISCLAIMER: These are fake nitros and can be used to troll your freinds.
 
 Copy code
 [p]repo add fidind3211 https://github.com/fidind3211/fidind321cogsred
