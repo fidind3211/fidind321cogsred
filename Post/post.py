@@ -7,7 +7,18 @@ class Post(commands.Cog):
     
     @commands.command()
     async def post(self, ctx, title, description, color, channel: discord.TextChannel):
-        embed = discord.Embed(title=title, description=description, color=int(color, 16))
+        try:
+            if color.startswith("#"):
+                # if color starts with '#' it's a hexadecimal color code
+                color_value = int(color[1:], 16)
+            else:
+                # otherwise, it's a color name
+                color_value = discord.Colour[color.lower()]().value
+        except (KeyError, ValueError):
+            await ctx.send(f"Invalid color '{color}'.")
+            return
+        
+        embed = discord.Embed(title=title, description=description, color=color_value)
         await channel.send(embed=embed)
     
     @commands.command()
