@@ -6,35 +6,39 @@ class AFKCog(commands.Cog):
         self.bot = bot
         self.afk_users = set()
 
+    async def _set_afk(self, user):
+        if user.id not in self.afk_users:
+            await user.edit(nick='[AFK] ' + user.display_name)
+            self.afk_users.add(user.id)
+            await user.send(f'You are now marked as AFK.')
+
+    async def _remove_afk(self, user):
+        if user.id in self.afk_users:
+            await user.edit(nick=user.display_name[6:])
+            self.afk_users.remove(user.id)
+            await user.send(f'You are no longer marked as AFK.')
+
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.content.startswith('!AFK'):
-            # Update user's nickname with [AFK] prefix
-            await message.author.edit(nick='[AFK] ' + message.author.display_name)
-            self.afk_users.add(message.author.id)
-
-        elif message.author.id in self.afk_users and not message.content.startswith('!AFK'):
-            # Remove [AFK] prefix from user's nickname
-            await message.author.edit(nick=message.author.display_name[6:])
-            self.afk_users.remove(message.author.id)
-            await message.channel.send(f'{message.author.display_name} is no longer AFK.')
+        if message.content.lower().startswith('!afk'):
+            await self._set_afk(message.author)
 
     @commands.command()
-    async def AFK(self, ctx):
-        # Update user's nickname with [AFK] prefix
-        await ctx.author.edit(nick='[AFK] ' + ctx.author.display_name)
-        self.afk_users.add(ctx.author.id)
-        await ctx.send(f'{ctx.author.display_name} is now AFK.')
+    async def afk(self, ctx):
+        await self._set_afk(ctx.author)
 
     @commands.command()
-    async def AFKS(self, ctx):
-        # List all users with [AFK] prefix in their nickname
-        afk_users = [member for member in ctx.guild.members if member.nick and member.nick.startswith('[AFK]')]
+    async def back(self, ctx):
+        await self._remove_afk(ctx.author)
+
+    @commands.command()
+    async def afks(self, ctx):
+        afk_users = [member for member in self.bot.get_all_members() if member.nick and member.nick.startswith('[AFK]') and member.id in self.afk_users]
         if afk_users:
-            response = 'AFK Users:\n' + '\n'.join(f"{member.display_name}" for member in afk_users)
+            response = 'AFK Users:\n' + '\n'.join(f"{member.name}#{member.discriminator} ({member.id})" for member in afk_users)
         else:
             response = 'No users are currently AFK.'
         await ctx.send(response)
-
+        
 def setup(bot):
     bot.add_cog(AFKCog(bot))
