@@ -1,6 +1,5 @@
 import discord
 from redbot.core import commands
-import webcolors
 
 class Post(commands.Cog):
     def __init__(self, bot):
@@ -8,21 +7,11 @@ class Post(commands.Cog):
     
     @commands.command()
     async def post(self, ctx, title, description, color, channel: discord.TextChannel):
-        try:
-            color_value = int(color, 16)
-        except ValueError:
-            try:
-                color_value = int(webcolors.name_to_hex(color).lstrip('#'), 16)
-            except ValueError:
-                await ctx.send("Invalid color value")
-                return
-
-        embed = discord.Embed(title=title, description=description, color=color_value)
+        embed = discord.Embed(title=title, description=description, color=int(color, 16))
         await channel.send(embed=embed)
-
+    
     @commands.command()
-    async def postmessage(self, ctx, *, message):
-        channel = ctx.channel
+    async def postmessage(self, ctx, message, channel: discord.TextChannel):
         await channel.send(message)
 
 def setup(bot):
