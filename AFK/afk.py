@@ -31,7 +31,7 @@ class AFKCog(commands.Cog):
         # List all users with [AFK] prefix in their nickname
         afk_users = [member for member in ctx.guild.members if member.nick and member.nick.startswith('[AFK]')]
         if afk_users:
-            response = 'AFK Users: ' + ', '.join(member.mention for member in afk_users)
+            response = 'AFK Users:\n' + '\n'.join(f"{member.name}#{member.discriminator} ({member.id})" for member in afk_users)
         else:
             response = 'No users are currently AFK.'
         await ctx.send(response)
