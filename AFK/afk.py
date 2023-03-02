@@ -5,28 +5,28 @@ class AFKCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.afk_users = set()
+        self.afk_reasons = {}
 
     async def _set_afk(self, user, reason=None):
         if user.id not in self.afk_users:
-            afk_tag = f'[AFK] {reason[:25]}' if reason else '[AFK]'
-            await user.edit(nick=afk_tag + ' ' + user.display_name)
+            await user.edit(nick='[AFK] ' + user.display_name)
             self.afk_users.add(user.id)
-            message = 'You are now marked as AFK.'
             if reason:
-                message += f' Reason: {reason}'
-            await user.send(message)
+                self.afk_reasons[user.id] = reason[:25]
+            await user.send('You are now marked as AFK.')
 
     async def _remove_afk(self, user):
         if user.id in self.afk_users:
             await user.edit(nick=user.display_name[6:])
             self.afk_users.remove(user.id)
+            if user.id in self.afk_reasons:
+                del self.afk_reasons[user.id]
             await user.send('You are no longer marked as AFK.')
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.content.lower().startswith('!afk'):
-            reason = message.content[5:].strip()
-            await self._set_afk(message.author, reason)
+        if message.content == '!AFK':
+            await self._set_afk(message.author)
 
     @commands.command()
     async def afk(self, ctx, *, reason=None):
@@ -40,7 +40,13 @@ class AFKCog(commands.Cog):
     async def afks(self, ctx):
         afk_users = [member for member in self.bot.get_all_members() if member.nick and member.nick.startswith('[AFK]') and member.id in self.afk_users]
         if afk_users:
-            response = 'AFK Users:\n' + '\n'.join(f"{member.name}#{member.discriminator} ({member.id})" for member in afk_users)
+            response = 'AFK Users:\n'
+            for member in afk_users:
+                reason = self.afk_reasons.get(member.id)
+                if reason:
+                    response += f"{member.name}#{member.discriminator} ({member.id}): {reason}\n"
+                else:
+                    response += f"{member.name}#{member.discriminator} ({member.id})\n"
         else:
             response = 'No users are currently AFK.'
         await ctx.send(response)
