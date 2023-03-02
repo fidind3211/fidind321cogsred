@@ -13,25 +13,25 @@ class AFKCog(commands.Cog):
             await message.author.edit(nick='[AFK] ' + message.author.display_name)
             self.afk_users.add(message.author.id)
 
-        elif message.author.id in self.afk_users:
+        elif message.author.id in self.afk_users and not message.content.startswith('!AFK'):
             # Remove [AFK] prefix from user's nickname
             await message.author.edit(nick=message.author.display_name[6:])
             self.afk_users.remove(message.author.id)
-            await message.channel.send(f'{message.author.mention} is no longer AFK.')
+            await message.channel.send(f'{message.author.display_name} is no longer AFK.')
 
     @commands.command()
     async def AFK(self, ctx):
         # Update user's nickname with [AFK] prefix
         await ctx.author.edit(nick='[AFK] ' + ctx.author.display_name)
         self.afk_users.add(ctx.author.id)
-        await ctx.send(f'{ctx.author.mention} is now AFK.')
+        await ctx.send(f'{ctx.author.display_name} is now AFK.')
 
     @commands.command()
     async def AFKS(self, ctx):
         # List all users with [AFK] prefix in their nickname
         afk_users = [member for member in ctx.guild.members if member.nick and member.nick.startswith('[AFK]')]
         if afk_users:
-            response = 'AFK Users:\n' + '\n'.join(f"{member.name}#{member.discriminator} ({member.id})" for member in afk_users)
+            response = 'AFK Users:\n' + '\n'.join(f"{member.display_name}" for member in afk_users)
         else:
             response = 'No users are currently AFK.'
         await ctx.send(response)
