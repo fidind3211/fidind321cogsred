@@ -6,26 +6,31 @@ class AFKCog(commands.Cog):
         self.bot = bot
         self.afk_users = set()
 
-    async def _set_afk(self, user):
+    async def _set_afk(self, user, reason=None):
         if user.id not in self.afk_users:
-            await user.edit(nick='[AFK] ' + user.display_name)
+            afk_tag = f'[AFK] {reason[:25]}' if reason else '[AFK]'
+            await user.edit(nick=afk_tag + ' ' + user.display_name)
             self.afk_users.add(user.id)
-            await user.send(f'You are now marked as AFK.')
+            message = 'You are now marked as AFK.'
+            if reason:
+                message += f' Reason: {reason}'
+            await user.send(message)
 
     async def _remove_afk(self, user):
         if user.id in self.afk_users:
             await user.edit(nick=user.display_name[6:])
             self.afk_users.remove(user.id)
-            await user.send(f'You are no longer marked as AFK.')
+            await user.send('You are no longer marked as AFK.')
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.content.lower().startswith('!afk'):
-            await self._set_afk(message.author)
+            reason = message.content[5:].strip()
+            await self._set_afk(message.author, reason)
 
     @commands.command()
-    async def afk(self, ctx):
-        await self._set_afk(ctx.author)
+    async def afk(self, ctx, *, reason=None):
+        await self._set_afk(ctx.author, reason)
 
     @commands.command()
     async def back(self, ctx):
@@ -39,6 +44,6 @@ class AFKCog(commands.Cog):
         else:
             response = 'No users are currently AFK.'
         await ctx.send(response)
-        
+
 def setup(bot):
     bot.add_cog(AFKCog(bot))
