@@ -81,7 +81,6 @@ class AFKCog(commands.Cog):
                 color=discord.Color.dark_green()
             )
         await ctx.send(embed=embed)
-
 @commands.command()
 async def afks(self, ctx):
     guild = ctx.guild
