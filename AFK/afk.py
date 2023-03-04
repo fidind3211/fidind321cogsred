@@ -81,28 +81,3 @@ class AFKCog(commands.Cog):
                 color=discord.Color.dark_green()
             )
         await ctx.send(embed=embed)
-@commands.command()
-async def afks(self, ctx):
-    guild = ctx.guild
-    await guild.chunk()
-    afk_users = [member for member in guild.members if member.nick and member.nick.startswith('[AFK]') and member.id in self.afk_users]
-    if afk_users:
-        response = 'AFK Users:\n'
-        for member in afk_users:
-            reason = self.afk_reasons.get(member.id)
-            if reason:
-                response += f"{member.name}#{member.discriminator} ({member.id}): {reason}\n"
-            else:
-                response += f"{member.name}#{member.discriminator} ({member.id})\n"
-        embed = discord.Embed(
-            title='List of AFK Users',
-            description=response,
-            color=discord.Color.dark_orange()
-        )
-    else:
-        embed = discord.Embed(
-            title='List of AFK Users',
-            description='No users are currently AFK.',
-            color=discord.Color.dark_green()
-        )
-    await ctx.send(embed=embed)
