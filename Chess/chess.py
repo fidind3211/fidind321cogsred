@@ -1,92 +1,63 @@
-import discord
-from discord.ext import commands
-import chess
+class ChessGame:
+    def __init__(self):
+        self.board = [
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+        ]
+        self.turn = 'white'
+        self.game_over = False
+        self.move_history = []
 
-class Chess(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.games = {}
+    def move_piece(self, start_pos, end_pos):
+        """
+        Move a piece on the chess board
+        """
+        x1, y1 = start_pos
+        x2, y2 = end_pos
 
-    @commands.command()
-    async def newchess(self, ctx):
-        # Check if a game is already in progress
-        if ctx.channel.id in self.games:
-            await ctx.send('A game is already in progress in this channel!')
-            return
+        piece = self.board[x1][y1]
+        dest_piece = self.board[x2][y2]
 
-        # Initialize a new chess board
-        board = chess.Board()
-        game_over = False
-        turn = True
+        if piece == '.':
+            return False
 
-        # Display the initial chess board
-        message = await ctx.send(f'```\n{board}\n```')
+        if dest_piece != '.':
+            if piece.isupper() == dest_piece.isupper():
+                return False
 
-        # Store the game state
-        self.games[ctx.channel.id] = (board, message, turn)
-
-        # Keep accepting moves until the game is over
-        while not game_over:
-            # Wait for a move from the player whose turn it is
-            def check(m):
-                return m.author == ctx.author and m.channel == ctx.channel
-
-            try:
-                move_msg = await self.bot.wait_for('message', check=check, timeout=60.0)
-            except asyncio.TimeoutError:
-                await ctx.send(f'{ctx.author.mention}, your turn has timed out!')
-                break
-
-            move = move_msg.content.lower()
-
-            # Check if the player wants to end the game
-            if move == '!endchess':
-                await ctx.send('The game has ended!')
-                del self.games[ctx.channel.id]
-                game_over = True
-                break
-
-            # Try to make the move on the chess board
-            try:
-                board, message, turn = self.games[ctx.channel.id]
-                if turn:
-                    board.push_san(move)
-                    turn = False
+        if piece.lower() == 'p':
+            if y1 == y2:
+                if dest_piece != '.':
+                    return False
+                if x2 == x1 - 2 and x1 == 6 and self.board[x1-1][y1] == '.':
+                    pass
+                elif x2 == x1 - 1:
+                    pass
                 else:
-                    board.push_san(move)
-                    turn = True
-            except ValueError:
-                await ctx.send('That move is not valid. Try again!')
-                continue
+                    return False
+            else:
+                if dest_piece == '.' or piece.isupper() == dest_piece.isupper():
+                    return False
+                if x2 != x1 - 1 or abs(y2 - y1) != 1:
+                    return False
 
-            # Check if the game has ended
-            if board.is_game_over():
-                result = board.result()
-                if result == '1-0':
-                    winner = 'White'
-                elif result == '0-1':
-                    winner = 'Black'
-                else:
-                    winner = 'Nobody'
-                await message.edit(content=f'```\n{board}\n```{winner} has won the game!')
-                del self.games[ctx.channel.id]
-                game_over = True
-                break
+        # TODO: Implement logic for other pieces
 
-            # Display the updated chess board
-            await message.edit(content=f'```\n{board}\n```')
-            self.games[ctx.channel.id] = (board, message, turn)
+        self.board[x1][y1] = '.'
+        self.board[x2][y2] = piece
 
-    @commands.command()
-    async def endchess(self, ctx):
-        # Check if a game is in progress
-        if ctx.channel.id not in self.games:
-            await ctx.send('No game is in progress in this channel!')
-            return
+        self.move_history.append((start_pos, end_pos))
 
-        # End the game
-        await ctx.send('The game has ended!')
-        del self.games[ctx.channel.id]
+        # Switch the turn to the other player
+        if self.turn == 'white':
+            self.turn = 'black'
+        else:
+            self.turn = 'white'
 
-def setup(bot):
-    bot.add_cog(Chess(bot))
+        return True
