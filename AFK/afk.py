@@ -85,7 +85,7 @@ class AFKCog(commands.Cog):
 @commands.command()
 async def afks(self, ctx):
     guild = ctx.guild
-    guild.fetch_members()
+    await guild.fetch_members()  # fetches all members in the guild
     afk_users = [member for member in guild.members if member.nick and member.nick.startswith('[AFK]') and member.id in self.afk_users]
     if afk_users:
         response = 'AFK Users:\n'
