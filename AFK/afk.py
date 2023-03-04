@@ -77,6 +77,7 @@ class AFKCog(commands.Cog):
                 description=f'{user.display_name} is AFK since {timestamp}. Reason: {reason}',
                 color=discord.Color.dark_orange()
             )
+            embed.set_footer(text=f"AFK since {timestamp}")
         else:
             member = await ctx.guild.fetch_member(user_id)
             embed = discord.Embed(
