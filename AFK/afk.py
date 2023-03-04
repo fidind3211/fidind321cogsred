@@ -85,7 +85,7 @@ class AFKCog(commands.Cog):
 @commands.command()
 async def afks(self, ctx):
     guild = ctx.guild
-    await guild.fetch_members()  # fetches all members in the guild
+    await guild.chunk()
     afk_users = [member for member in guild.members if member.nick and member.nick.startswith('[AFK]') and member.id in self.afk_users]
     if afk_users:
         response = 'AFK Users:\n'
@@ -107,6 +107,3 @@ async def afks(self, ctx):
             color=discord.Color.dark_green()
         )
     await ctx.send(embed=embed)
-
-def setup(bot):
-    bot.add_cog(AFKCog(bot))
