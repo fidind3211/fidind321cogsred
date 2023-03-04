@@ -66,8 +66,9 @@ class AFKCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def isafk(self, ctx, user: discord.Member):
-        if user.id in self.afk_users:
+    async def isafk(self, ctx, user_id: int):
+        user = ctx.guild.get_member(user_id)
+        if user and user.id in self.afk_users:
             reason = self.afk_reasons.get(user.id, '')
             embed = discord.Embed(
                 title='AFK status',
@@ -75,9 +76,11 @@ class AFKCog(commands.Cog):
                 color=discord.Color.dark_orange()
             )
         else:
+            member = await ctx.guild.fetch_member(user_id)
             embed = discord.Embed(
                 title='AFK status',
-                description=f'{user.display_name} is not AFK.',
+                description=f'{member.display_name} is not AFK.',
                 color=discord.Color.dark_green()
             )
         await ctx.send(embed=embed)
+
