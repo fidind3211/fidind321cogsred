@@ -1,0 +1,11 @@
+{
+  "author": ["Sparkow"],
+  "install_msg": "Thank you for installing my repository !\n\nUse `[p]cog list fidind321cogsred` command to see all my cogs.",
+  "name": "fidind321cogsred",
+  "short": " cogs.",
+  "description": "Various cogs, for various purposes such as afk, Post, and Nitro" ,
+  "tags": [
+    "utility",
+    "various"
+  ]
+}
