@@ -1,6 +1,7 @@
 import discord
 from redbot.core import commands, checks
 from datetime import datetime
+from discord.utils import format_dt
 
 class AFKCog(commands.Cog):
     def __init__(self, bot):
@@ -71,7 +72,7 @@ class AFKCog(commands.Cog):
         user = ctx.guild.get_member(user_id)
         if user and user.id in self.afk_users:
             reason = self.afk_reasons.get(user.id, '')
-            timestamp = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+            timestamp = format_dt(self.bot, user.joined_at, style='F')
             embed = discord.Embed(
                 title='AFK status',
                 description=f'{user.display_name} is AFK since {timestamp}. Reason: {reason}',
