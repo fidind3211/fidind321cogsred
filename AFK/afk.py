@@ -1,3 +1,7 @@
+import discord
+from redbot.core import commands, checks
+from datetime import datetime
+
 class AFKCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
