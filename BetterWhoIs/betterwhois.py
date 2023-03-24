@@ -6,7 +6,7 @@ class BetterWhoIsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name='bwhois')
     async def bwhois(self, ctx, user: discord.Member):
         # User information
         created_at = user.created_at.strftime("%Y-%m-%d %H:%M:%S")
