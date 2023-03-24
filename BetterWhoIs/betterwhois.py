@@ -9,7 +9,7 @@ class BetterWhoIsCog(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def whois(self, ctx, user: discord.Member = None):
+    async def bwhois(self, ctx, user: discord.Member = None):
         if user is None:
             user = ctx.author
 
