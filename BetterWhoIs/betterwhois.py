@@ -8,7 +8,7 @@ class BetterWhoIsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @bot.command()
+    @commands.command()
     async def bwhois(self, ctx, user: discord.Member = None):
         if user is None:
             user = ctx.author
