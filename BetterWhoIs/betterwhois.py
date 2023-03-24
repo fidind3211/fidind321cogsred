@@ -7,7 +7,10 @@ class BetterWhoIsCog(commands.Cog):
         self.bot = bot
 
     @commands.command(name='bwhois')
-    async def bwhois(self, ctx, user: discord.Member):
+    async def bwhois(self, ctx, user: discord.Member = None):
+        if user is None:
+            user = ctx.author
+        
         # User information
         created_at = user.created_at.strftime("%Y-%m-%d %H:%M:%S")
         joined_at = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
@@ -52,3 +55,4 @@ class BetterWhoIsCog(commands.Cog):
         if game_image is not None:
             embed.set_image(url=game_image)
         await ctx.send(embed=embed)
+
