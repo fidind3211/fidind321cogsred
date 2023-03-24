@@ -52,5 +52,3 @@ async def whois(ctx, user: discord.Member):
     if game_image is not None:
         embed.set_image(url=game_image)
     await ctx.send(embed=embed)
-
-bot.run('')  # Leave this line empty
