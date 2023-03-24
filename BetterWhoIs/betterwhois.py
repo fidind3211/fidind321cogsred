@@ -7,7 +7,7 @@ class BetterWhoIsCog(commands.Cog):
         self.bot = bot
 
 @commands.command()
-async def whois(ctx, user: discord.Member):
+async def bwhois(ctx, user: discord.Member):
     # User information
     created_at = user.created_at.strftime("%Y-%m-%d %H:%M:%S")
     joined_at = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
