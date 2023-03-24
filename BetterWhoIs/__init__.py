@@ -1,4 +1,4 @@
 from .betterwhois import BetterWhoIsCog
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(BetterWhoIsCog(bot))
