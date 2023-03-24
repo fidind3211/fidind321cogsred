@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import aiohttp
 from io import BytesIO
 
-class BetterWhoisCog(commands.Cog):
+class BetterWhoIsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
