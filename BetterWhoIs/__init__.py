@@ -1,4 +1,4 @@
-from .betterwhois import betterwhoisCog
+from .betterwhois import BetterWhoIsCog
 
 def setup(bot):
-    bot.add_cog(betterwhoisCog(bot))
+    bot.add_cog(BetterWhoIsCog(bot))

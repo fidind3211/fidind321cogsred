@@ -23,13 +23,6 @@ class BetterWhoisCog(commands.Cog):
         embed.add_field(name="Account Created", value=user.created_at.strftime("%m/%d/%Y %H:%M:%S"), inline=True)
         embed.add_field(name="Joined Server", value=user.joined_at.strftime("%m/%d/%Y %H:%M:%S"), inline=True)
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://api.roblox.com/users/{user.id}") as r:
-                if r.status == 200:
-                    data = await r.json()
-                    created = datetime.strptime(data["created"], "%Y-%m-%dT%H:%M:%S.%f")
-                    embed.add_field(name="Roblox Account Created", value=created.strftime("%m/%d/%Y %H:%M:%S"), inline=True)
-
         if user.activity is not None and isinstance(user.activity, discord.Spotify):
             artist = user.activity.artist
             album = user.activity.album
