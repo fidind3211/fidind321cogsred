@@ -49,4 +49,4 @@ class BetterWhoisCog(commands.Cog):
         await ctx.send(embed=embed)
 
 def setup(bot):
-    bot.add_cog(BetterWhoisCog(bot))    
+    bot.add_cog(BetterWhoIsCog(bot))    
