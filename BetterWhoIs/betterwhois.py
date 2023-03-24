@@ -1,54 +1,56 @@
 import discord
 from discord.ext import commands
-from datetime import datetime, timedelta
-import aiohttp
-from io import BytesIO
+from datetime import datetime
 
 class BetterWhoIsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="bwhois")
-    async def bwhois(self, ctx, user: discord.Member = None):
-        if user is None:
-            user = ctx.author
+@bot.command()
+async def whois(ctx, user: discord.Member):
+    # User information
+    created_at = user.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    joined_at = user.joined_at.strftime("%Y-%m-%d %H:%M:%S")
+    user_id = user.id
+    user_name = user.name
+    user_discriminator = user.discriminator
+    user_avatar = user.avatar_url
 
-        embed = discord.Embed(title=f"User Info - {user.name}", color=0x00FFFF)
-        embed.set_thumbnail(url=user.avatar_url)
-        embed.add_field(name="ID", value=user.id, inline=True)
-        embed.add_field(name="Username", value=user.name, inline=True)
-        embed.add_field(name="Nickname", value=user.nick, inline=True)
-        embed.add_field(name="Status", value=user.status, inline=True)
-        embed.add_field(name="Activity", value=user.activity, inline=True)
-        embed.add_field(name="Account Created", value=user.created_at.strftime("%m/%d/%Y %H:%M:%S"), inline=True)
-        embed.add_field(name="Joined Server", value=user.joined_at.strftime("%m/%d/%Y %H:%M:%S"), inline=True)
+    # Guild information
+    member_number = sum(1 for member in ctx.guild.members if not member.bot and member.joined_at < user.joined_at) + 1
 
-        if user.activity is not None and isinstance(user.activity, discord.Spotify):
-            artist = user.activity.artist
-            album = user.activity.album
-            track_title = user.activity.title
-            album_cover_url = user.activity.album_cover_url
-            track_url = user.activity.track_url
+    # Roles information
+    roles_list = [role.name for role in user.roles if role.name != "@everyone"]
+    roles = ", ".join(roles_list) if roles_list else "None"
 
-            embed.add_field(name="Currently Listening to Spotify", value=f"{artist} - {track_title}", inline=False)
-            embed.set_image(url=album_cover_url)
+    # Status information
+    status = str(user.status).title()
 
-        if user.activity is not None and isinstance(user.activity, discord.Game):
-            game_name = user.activity.name
-            if user.activity.large_image_url:
-                image_url = user.activity.large_image_url
-            elif user.activity.small_image_url:
-                image_url = user.activity.small_image_url
+    # Game information
+    game_name = "None"
+    game_image = None
+    if user.activity is not None:
+        if isinstance(user.activity, discord.Spotify):
+            game_name = f"Listening to {user.activity.title} by {user.activity.artist}"
+            game_image = user.activity.album_cover_url
+        elif isinstance(user.activity, discord.Game):
+            game_name = f"Playing {user.activity.name}"
+            game_image = user.activity.large_image_url
 
-            async with aiohttp.ClientSession() as session:
-                async with session.get(image_url) as r:
-                    if r.status == 200:
-                        data = BytesIO(await r.read())
-                        embed.set_image(url=image_url)
+    # Send the response
+    embed = discord.Embed(title=f"{user.name}'s Info", description="", color=0x00aaff)
+    embed.add_field(name="User ID", value=user_id, inline=True)
+    embed.add_field(name="User Name", value=user_name, inline=True)
+    embed.add_field(name="Discriminator", value=user_discriminator, inline=True)
+    embed.add_field(name="Account Created", value=created_at, inline=False)
+    embed.add_field(name="Joined Server", value=joined_at, inline=False)
+    embed.add_field(name="Member Number", value=member_number, inline=False)
+    embed.add_field(name="Roles", value=roles, inline=False)
+    embed.add_field(name="Status", value=status, inline=True)
+    embed.add_field(name=game_name, value="", inline=True)
+    embed.set_thumbnail(url=user_avatar)
+    if game_image is not None:
+        embed.set_image(url=game_image)
+    await ctx.send(embed=embed)
 
-            embed.add_field(name="Currently Playing", value=game_name, inline=True)
-
-        await ctx.send(embed=embed)
-
-def setup(bot):
-    bot.add_cog(BetterWhoIsCog(bot))
+bot.run('')  # Leave this line empty
