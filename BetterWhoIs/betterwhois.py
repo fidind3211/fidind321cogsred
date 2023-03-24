@@ -40,13 +40,15 @@ class BetterWhoIsCog(commands.Cog):
             elif user.activity.small_image_url:
                 image_url = user.activity.small_image_url
 
+            async with aiohttp.ClientSession() as session:
+                async with session.get(image_url) as r:
+                    if r.status == 200:
+                        data = BytesIO(await r.read())
+                        embed.set_image(url=image_url)
+
             embed.add_field(name="Currently Playing", value=game_name, inline=True)
-            async with session.get(image_url) as r:
-                if r.status == 200:
-                    data = BytesIO(await r.read())
-                    embed.set_image(url=image_url)
 
         await ctx.send(embed=embed)
 
 def setup(bot):
-    bot.add_cog(BetterWhoIsCog(bot))    
+    bot.add_cog(BetterWhoIsCog(bot))
