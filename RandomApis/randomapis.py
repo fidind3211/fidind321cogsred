@@ -1,29 +1,20 @@
 import discord
-import requests
-from discord.ext import commands
+import aiohttp
+from redbot.core import commands
 
-class RandomApiss(commands.Cog):
+class RandomApis(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    async def amogus(self, ctx, user: discord.Member = None):
+    async def comrade(self, ctx, *, user: discord.Member=None):
         user = user or ctx.author
-        avatar_url = str(user.avatar_url_as(format="png", size=1024))
-        username = str(user)
-        
-        params = {
-            "username": username,
-            "avatar": avatar_url
-        }
-        
-        response = requests.get("https://some-random-api.ml/premium/amongus", params=params)
-        response.raise_for_status()
-        
-        data = response.json()
-        image_url = data.get("link")
-        if not image_url:
-            await ctx.send("Failed to get image.")
-            return
-        
-        await ctx.send(image_url)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://some-random-api.ml/canvas/overlay/comrade?avatar={user.avatar_url}") as resp:
+                if resp.status != 200:
+                    return await ctx.send('Error getting image...')
+                data = io.BytesIO(await resp.read())
+                await ctx.send(file=discord.File(data, 'comrade.png'))
+
+def setup(bot):
+    bot.add_cog(RandomApis(bot))
