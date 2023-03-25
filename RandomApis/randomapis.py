@@ -19,7 +19,7 @@ class RandomApis(commands.Cog):
                 await ctx.send(file=discord.File(data, 'comrade.png'))
 
     @commands.command()
-    async def nobitches(self, ctx, *, user: commands.MemberConverter=None):
+    async def nobitches(self, ctx, *, user: commands.MemberConverter = None):
         user = user or ctx.author
         avatar_url = user.avatar_url_as(format='png', size=1024)
         async with aiohttp.ClientSession() as session:
@@ -27,7 +27,10 @@ class RandomApis(commands.Cog):
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
-                await ctx.send(file=discord.File(data, 'nobitches.png'))
+        try:
+            await ctx.send(file=discord.File(data, 'nobitches.png'))
+        except discord.errors.HTTPException:
+            await ctx.send('Error sending file, the file size may be too large.')
 
 def setup(bot):
     bot.add_cog(RandomApis(bot))
