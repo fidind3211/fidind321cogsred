@@ -2,7 +2,7 @@ import discord
 import requests
 from discord.ext import commands
 
-class RandomAPIs(commands.Cog):
+class RandomApiss(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
