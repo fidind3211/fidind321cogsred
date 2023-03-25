@@ -18,5 +18,14 @@ class RandomApis(commands.Cog):
                 data = io.BytesIO(await resp.read())
                 await ctx.send(file=discord.File(data, 'comrade.png'))
 
+    @commands.command()
+    async def nobitches(self, ctx):
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://some-random-api.ml/canvas/misc/nobitches") as resp:
+                if resp.status != 200:
+                    return await ctx.send('Error getting image...')
+                data = io.BytesIO(await resp.read())
+                await ctx.send(file=discord.File(data, 'nobitches.png'))
+
 def setup(bot):
     bot.add_cog(RandomApis(bot))
