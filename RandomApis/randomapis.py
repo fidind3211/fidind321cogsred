@@ -23,7 +23,7 @@ class RandomApis(commands.Cog):
         user = user or ctx.author
         avatar_url = user.avatar_url
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?avatar={avatar_url}") as resp:
+            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?avatar={avatar_url}&no=no+sra+update") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
