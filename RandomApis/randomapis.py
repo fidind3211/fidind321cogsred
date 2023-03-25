@@ -19,16 +19,25 @@ class RandomApis(commands.Cog):
                 await ctx.send(file=discord.File(data, 'comrade.png'))
 
     @commands.command()
-    async def nobitches(self, ctx, *, message=""):
-        if message:
-            message = message.replace(" ", "+")
+    async def nobitches(self, ctx, *, user: commands.MemberConverter=None):
+        user = user or ctx.author
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?no=no+bitches+{message}") as resp:
+            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?no=no+sra+update") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
                 await ctx.send(file=discord.File(data, 'nobitches.png'))
 
+    @commands.command()
+    async def hornyjail(self, ctx, *, user: commands.MemberConverter=None):
+        user = user or ctx.author
+        avatar_url = user.avatar_url
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://some-random-api.ml/canvas/overlay/jail?avatar={avatar_url}") as resp:
+                if resp.status != 200:
+                    return await ctx.send('Error getting image...')
+                data = io.BytesIO(await resp.read())
+                await ctx.send(file=discord.File(data, 'hornyjail.png'))
+
 def setup(bot):
     bot.add_cog(RandomApis(bot))
-
