@@ -50,8 +50,8 @@ class RandomApis(commands.Cog):
             data = io.BytesIO(await resp.read())
             await ctx.send(file=discord.File(data, 'simpcard.png'))
 
-     @commands.command()
-     async def tonikawa(self, ctx, *, user: commands.MemberConverter=None):
+    @commands.command()
+    async def tonikawa(self, ctx, *, user: commands.MemberConverter=None):
         user = user or ctx.author
         avatar_url = user.avatar_url_as(format='png', size=1024)
         async with aiohttp.ClientSession() as session:
