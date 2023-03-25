@@ -22,7 +22,7 @@ class RandomApis(commands.Cog):
     async def nobitches(self, ctx, *, user: commands.MemberConverter=None):
         user = user or ctx.author
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?no=no+sra+update") as resp:
+            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?no=no+bitches") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
