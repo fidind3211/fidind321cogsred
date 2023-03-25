@@ -9,19 +9,15 @@ class RandomApis(commands.Cog):
         self.base_url = "https://some-random-api.ml/premium/amongus"
 
     @commands.command(name="amogus")
-    async def amogus(self, ctx, username: str = None, *, custom: str = None):
-        if username is None and len(ctx.message.mentions) > 0:
-            username = ctx.message.mentions[0].name
-            avatar_url = str(ctx.message.mentions[0].avatar_url_as(format='png'))
-        else:
+    async def amogus(self, ctx, *, username: str = None):
+        avatar = str(ctx.author.avatar_url_as(format="png"))
+        if not username:
             username = ctx.author.name
-            avatar_url = str(ctx.author.avatar_url_as(format='png'))
 
-        params = {"username": username, "avatar": avatar_url}
-        if custom:
-            params["custom"] = custom
+        params = {"username": username, "avatar": avatar}
         response = requests.get(self.base_url, params=params)
-        image_url = response.json()["link"]
+        response.raise_for_status()
+        image_url = response.json()["data"]
         embed = discord.Embed(title="Amogus", color=discord.Color.red())
         embed.set_image(url=image_url)
         await ctx.send(embed=embed)
