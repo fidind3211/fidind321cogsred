@@ -1,26 +1,29 @@
 import discord
 import requests
+from discord.ext import commands
 
-from redbot.core import commands
-
-class RandomApis(commands.Cog):
+class RandomAPIs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.base_url = "https://some-random-api.ml/premium/amongus"
 
-    @commands.command(name="amogus")
-    async def amogus(self, ctx, *, username: str = None):
-        avatar = str(ctx.author.avatar_url_as(format="png"))
-        if not username:
-            username = ctx.author.name
-
-        params = {"username": username, "avatar": avatar}
-        response = requests.get(self.base_url, params=params)
+    @commands.command()
+    async def amogus(self, ctx, user: discord.Member = None):
+        user = user or ctx.author
+        avatar_url = str(user.avatar_url_as(format="png", size=1024))
+        username = str(user)
+        
+        params = {
+            "username": username,
+            "avatar": avatar_url
+        }
+        
+        response = requests.get("https://some-random-api.ml/premium/amongus", params=params)
         response.raise_for_status()
-        image_url = response.json()["data"]
-        embed = discord.Embed(title="Amogus", color=discord.Color.red())
-        embed.set_image(url=image_url)
-        await ctx.send(embed=embed)
-
-def setup(bot):
-    bot.add_cog(RandomApis(bot))
+        
+        data = response.json()
+        image_url = data.get("link")
+        if not image_url:
+            await ctx.send("Failed to get image.")
+            return
+        
+        await ctx.send(image_url)
