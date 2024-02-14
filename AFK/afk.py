@@ -1,5 +1,5 @@
 import discord
-from redbot.core import commands, checks
+from discord.ext import commands
 from datetime import datetime
 
 class AFKCog(commands.Cog):
@@ -86,3 +86,6 @@ class AFKCog(commands.Cog):
                 color=discord.Color.dark_green()
             )
         await ctx.send(embed=embed)
+
+def setup(bot):
+    bot.add_cog(AFKCog(bot))
