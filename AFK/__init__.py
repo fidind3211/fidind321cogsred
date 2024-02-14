@@ -1,4 +1,4 @@
 from .afk import AFKCog
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(AFKCog(bot))
