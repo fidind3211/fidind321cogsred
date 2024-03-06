@@ -62,5 +62,5 @@ class RandomApis(commands.Cog):
                 data = io.BytesIO(await resp.read())
                 await ctx.send(file=discord.File(data, 'tonikawa.png'))
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(RandomApis(bot))
