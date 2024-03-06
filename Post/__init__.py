@@ -1,4 +1,4 @@
 from .post import Post
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(Post(bot))
