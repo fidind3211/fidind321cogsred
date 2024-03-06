@@ -12,7 +12,7 @@ class RandomApis(commands.Cog):
         user = user or ctx.author
         avatar_url = user.avatar_url_as(format='png', size=1024)
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/overlay/comrade?avatar={avatar_url}") as resp:
+            async with session.get(f"https://some-random-api.com/canvas/overlay/comrade?avatar={avatar_url}") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
@@ -23,7 +23,7 @@ class RandomApis(commands.Cog):
         if message:
             message = message.replace(" ", "+")
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/misc/nobitches?no=no+bitches+{message}") as resp:
+            async with session.get(f"https://some-random-api.com/canvas/misc/nobitches?no=no+bitches+{message}") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
@@ -34,7 +34,7 @@ class RandomApis(commands.Cog):
         user = user or ctx.author
         avatar_url = user.avatar_url_as(format='png', size=1024)
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/overlay/jail?avatar={avatar_url}") as resp:
+            async with session.get(f"https://some-random-api.com/canvas/overlay/jail?avatar={avatar_url}") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
@@ -45,7 +45,7 @@ class RandomApis(commands.Cog):
      user = user or ctx.author
      avatar_url = user.avatar_url_as(format='png', size=1024)
      async with aiohttp.ClientSession() as session:
-        async with session.get(f"https://some-random-api.ml/canvas/misc/simpcard?avatar={avatar_url}") as resp:
+        async with session.get(f"https://some-random-api.com/canvas/misc/simpcard?avatar={avatar_url}") as resp:
             if resp.status != 200:
                 return await ctx.send('Error getting image...')
             data = io.BytesIO(await resp.read())
@@ -56,7 +56,7 @@ class RandomApis(commands.Cog):
         user = user or ctx.author
         avatar_url = user.avatar_url_as(format='png', size=1024)
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://some-random-api.ml/canvas/misc/tonikawa?avatar={avatar_url}") as resp:
+            async with session.get(f"https://some-random-api.com/canvas/misc/tonikawa?avatar={avatar_url}") as resp:
                 if resp.status != 200:
                     return await ctx.send('Error getting image...')
                 data = io.BytesIO(await resp.read())
